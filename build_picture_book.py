@@ -35,6 +35,7 @@
 ### Options ###
 paper_size = 'A4'  # Choose 'A4', 'A5' or 'A6' paper
 quality = 'H'  # Choose 'H' (300dpi), 'M' 150dpi) or 'L' (75dpi) quality
+front_matter = True # choose False if you don't want front matter
 selection = [
     '001',
     '004',
@@ -286,46 +287,47 @@ with tempfile.TemporaryDirectory() as temp_dir:
             # convert jpg stored in memory into pdf and save in temporary folder
             image_file.write(img2pdf.convert(o, layout_fun=layout))
 
-    # Create front matter
-    print('\nCreating front matter...')
-    left_margin = paper_input[0] * 0.15
+    if front_matter:
+        # Create front matter
+        print('\nCreating front matter...')
+        left_margin = paper_input[0] * 0.15
 
-    # Title page
-    title_pdf = os.path.join(temp_dir, '0000_title.pdf')
-    title_page = Canvas(title_pdf, pagesize=paper_input)
-    # write the title
-    set_large_font(title_page)
-    title_page.drawCentredString(
-        paper_input[0] / 2, paper_input[1] * 0.9, title)
-    # write the subtitle
-    set_medium_font(title_page)
-    for i, t in enumerate(subtitle.splitlines()):
+        # Title page
+        title_pdf = os.path.join(temp_dir, '0000_title.pdf')
+        title_page = Canvas(title_pdf, pagesize=paper_input)
+        # write the title
+        set_large_font(title_page)
         title_page.drawCentredString(
-            paper_input[0] / 2, paper_input[1] * 0.15 - (i * 25 / font_scaling), t)
-    # add the title image
-    title_image = Image.open(title_page_image)
-    # crop image to 60% of the size of the page
-    cropped_image_size = (int(paper_input[0] * 0.6), int(paper_input[1] * 0.6))
-    title_image = title_image.resize(cropped_image_size)
-    # Add picture x centered, bottom corner at 20% of page height
-    x = paper_input[0] / 2 - cropped_image_size[0] / 2
-    title_page.drawInlineImage(title_image, x, paper_input[1] * 0.2)
-    title_page.save()
+            paper_input[0] / 2, paper_input[1] * 0.9, title)
+        # write the subtitle
+        set_medium_font(title_page)
+        for i, t in enumerate(subtitle.splitlines()):
+            title_page.drawCentredString(
+                paper_input[0] / 2, paper_input[1] * 0.15 - (i * 25 / font_scaling), t)
+        # add the title image
+        title_image = Image.open(title_page_image)
+        # crop image to 60% of the size of the page
+        cropped_image_size = (int(paper_input[0] * 0.6), int(paper_input[1] * 0.6))
+        title_image = title_image.resize(cropped_image_size)
+        # Add picture x centered, bottom corner at 20% of page height
+        x = paper_input[0] / 2 - cropped_image_size[0] / 2
+        title_page.drawInlineImage(title_image, x, paper_input[1] * 0.2)
+        title_page.save()
 
-    # Copyright page
-    copyright_pdf = os.path.join(temp_dir, '0001_copyright.pdf')
-    copyright_page = Canvas(copyright_pdf, pagesize=paper_input)
-    # Add the copyright info to the address
-    draw_paragraph(copyright_page, _copyright +
-                   '\n' * 3 + ntm_address, 0.9, 'S')
-    copyright_page.save()
+        # Copyright page
+        copyright_pdf = os.path.join(temp_dir, '0001_copyright.pdf')
+        copyright_page = Canvas(copyright_pdf, pagesize=paper_input)
+        # Add the copyright info to the address
+        draw_paragraph(copyright_page, _copyright +
+                    '\n' * 3 + ntm_address, 0.9, 'S')
+        copyright_page.save()
 
-    preface_pdf = os.path.join(temp_dir, '0002_preface.pdf')
-    preface_page = Canvas(preface_pdf, pagesize=paper_input)
-    # write the English and Tok Pisin prefaces
-    draw_paragraph(preface_page, preface +
-                   '\n' * 3 + tpi_preface, 0.75, 'S')
-    preface_page.save()
+        preface_pdf = os.path.join(temp_dir, '0002_preface.pdf')
+        preface_page = Canvas(preface_pdf, pagesize=paper_input)
+        # write the English and Tok Pisin prefaces
+        draw_paragraph(preface_page, preface +
+                    '\n' * 3 + tpi_preface, 0.75, 'S')
+        preface_page.save()
 
     # Merge temp files together
     print('Merging pdf pages...')
