@@ -1,15 +1,20 @@
 # Picture book builder
-Build a pdf picture book of Bible pictures from a folder of jpegs
+Build a pdf picture book with front matter from a folder of jpegs
 
 Creator: stephen_stanley@ntmpng.org, GPL v3
 
-This script will take a selection of Foundation Matters chronological
-pictures that you define and build them into an A4, A5 or A6 book.
+This script will take a selection of jpegs (with a 3 digit number in their filename) and convert the indicated selection
+into an A4, A5 or A6 or pdf book, complete with front matter.
 
 ![Example image](example_screenshot.png)
 
 - Provide a list of picture numbers
 - .jpeg pictures are converted to pdf and formatted to A4, A5 or A6 books for easy printing
+
+### History
+Our organisation wanted a subset of Bible pictures from a collection to be turned into a printable book in different sizes. The pictures were .jpgs organised with filenames like this: '000 picture.jpg'.
+
+This script was written specifically for that project, but could be easily generalized to create other printable pdf books from .jpg images.
 
 
 ## Installation:
